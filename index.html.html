@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fogo à Vista – denuncie queimadas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f6f3;--surf:#fff;--ink:#16231b;--mute:#52605a;--line:#d5ded8;--green:#1d5c3a;--leaf:#3d8b5b;--tint:#e3efe7;--fire:#d9480f;--fire-d:#b43a0a;--red:#c92a2a;--land:#dfe9e2;--sea:#eef3f7;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101a14;--surf:#17251d;--ink:#e8f0ea;--mute:#a3b3a9;--line:#2c3f33;--green:#7fcf9c;--leaf:#5fb27e;--tint:#1d3326;--fire:#ff7a3d;--fire-d:#ff9460;--red:#ff6b6b;--land:#223529;--sea:#131f18;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#101a14;--surf:#17251d;--ink:#e8f0ea;--mute:#a3b3a9;--line:#2c3f33;--green:#7fcf9c;--leaf:#5fb27e;--tint:#1d3326;--fire:#ff7a3d;--fire-d:#ff9460;--red:#ff6b6b;--land:#223529;--sea:#131f18;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.6 "Public Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","Public Sans",sans-serif;line-height:1.1;margin:0 0 .6rem;letter-spacing:-.02em}
+h1{font-size:clamp(2.3rem,8vw,4.2rem);font-weight:800}h2{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:700}h3{font-size:1.15rem;font-weight:700}
+p{margin:0 0 1rem;max-width:68ch}a{color:var(--green)}
+:focus-visible{outline:3px solid var(--fire);outline-offset:2px;border-radius:4px}
+.skip{position:absolute;left:-999px;top:0;background:var(--surf);padding:.6rem 1rem;z-index:99}.skip:focus{left:8px;top:8px}
+header.top{position:sticky;top:0;z-index:20;background:var(--green);color:#fff;padding:.7rem 1rem;padding-top:calc(.7rem + env(safe-area-inset-top,0px))}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) header.top{background:#0c2417}}
+header.top .in{max-width:1080px;margin:auto;display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;align-items:center;justify-content:space-between}
+.brand{font:800 1.3rem "Bricolage Grotesque",sans-serif;color:#fff;text-decoration:none;display:flex;gap:.5rem;align-items:center}
+.brand i{width:14px;height:14px;border-radius:50%;background:#ff8a4c;box-shadow:0 0 0 4px rgba(255,138,76,.35)}
+nav{display:flex;flex-wrap:wrap;gap:.2rem}nav a{color:#fff;text-decoration:none;padding:.35rem .7rem;border-radius:999px;font-weight:500;font-size:.95rem}
+nav a:hover,nav a[aria-current=page]{background:rgba(255,255,255,.18)}
+main{max-width:1080px;margin:auto;padding:1.5rem 1rem 4rem}
+main>section{display:none}main>section.on{display:block}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:48px;padding:.7rem 1.4rem;border-radius:10px;border:2px solid var(--green);background:transparent;color:var(--green);font:600 1rem "Public Sans",sans-serif;cursor:pointer;text-decoration:none}
+.btn.fire{background:var(--fire);border-color:var(--fire);color:#fff}.btn.fire:hover{background:var(--fire-d)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.fire{color:#1a0d05}}
+.btn.big{font-size:1.2rem;padding:1rem 1.8rem}.btn.sm{min-height:36px;padding:.3rem .8rem;font-size:.9rem}
+.hero{display:grid;gap:2rem;align-items:center;padding:1rem 0 2rem}
+@media(min-width:860px){.hero{grid-template-columns:1.1fr .9fr}}
+.hero p.lead{font-size:1.2rem;color:var(--mute)}
+.stats{display:flex;flex-wrap:wrap;gap:1.5rem;margin:1.5rem 0;padding:1rem 0;border-block:1px solid var(--line)}
+.stats b{display:block;font:800 1.9rem "Bricolage Grotesque",sans-serif;color:var(--green)}.stats span{color:var(--mute);font-size:.9rem}
+.card{background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:1.2rem}
+.grid3{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.map{width:100%;height:auto;display:block;background:var(--sea);border:1px solid var(--line);border-radius:14px;touch-action:manipulation}
+.map .land{fill:var(--land);stroke:var(--leaf);stroke-width:1.5}.map.pick{cursor:crosshair}
+.pin{stroke:var(--surf);stroke-width:1.5}.pin.baixa{fill:#e0a800}.pin.media{fill:#f08c00}.pin.alta{fill:var(--fire)}.pin.critica{fill:var(--red)}
+.pulse{animation:pl 2s ease-out 3;transform-box:fill-box;transform-origin:center}
+@keyframes pl{0%{transform:scale(1);opacity:.9}100%{transform:scale(3.2);opacity:0}}
+@media(prefers-reduced-motion:reduce){.pulse{animation:none;opacity:.3}}
+label{display:block;font-weight:600;margin:.9rem 0 .3rem}.hint{color:var(--mute);font-size:.88rem;font-weight:400}
+input[type=text],input[type=email],input[type=password],input[type=datetime-local],textarea,select{width:100%;min-height:46px;padding:.6rem .8rem;border:1.5px solid var(--line);border-radius:10px;background:var(--surf);color:var(--ink);font:inherit}
+textarea{min-height:130px;resize:vertical}
+.row{display:grid;gap:.8rem;grid-template-columns:1fr 1fr}
+.chk{display:flex;gap:.6rem;align-items:flex-start;font-weight:400;margin:.4rem 0}.chk input{width:22px;height:22px;margin-top:2px;accent-color:var(--green)}
+.tags{display:flex;flex-wrap:wrap;gap:.4rem .9rem}
+.steps{display:flex;gap:.4rem;list-style:none;padding:0;margin:0 0 1.2rem;flex-wrap:wrap}
+.steps li{padding:.3rem .8rem;border-radius:999px;background:var(--tint);color:var(--mute);font-size:.88rem;font-weight:600}
+.steps li.cur{background:var(--green);color:#fff}.steps li.done{color:var(--green)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .steps li.cur{color:#0c2417}}
+.err{color:var(--red);font-weight:600;margin:.6rem 0}.ok{color:var(--green);font-weight:600}
+.alert{border-left:6px solid var(--fire);background:var(--surf);padding:.8rem 1rem;border-radius:8px;margin:1rem 0}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:.6rem;margin-top:.8rem}
+.thumbs figure{margin:0;font-size:.75rem;color:var(--mute);word-break:break-all}.thumbs img,.thumbs video{width:100%;height:84px;object-fit:cover;border-radius:8px;background:var(--tint)}
+progress{width:100%;height:14px;accent-color:var(--fire)}
+.proto{font:800 clamp(1.5rem,6vw,2.4rem) "Bricolage Grotesque",sans-serif;letter-spacing:.04em;color:var(--green);background:var(--tint);padding:.6rem 1rem;border-radius:10px;display:inline-block;margin:.6rem 0}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:860px;font-size:.92rem}th,td{text-align:left;padding:.55rem .6rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--mute)}td select{min-height:36px;padding:.2rem .4rem}
+.badge{display:inline-block;padding:.1rem .6rem;border-radius:999px;font-size:.8rem;font-weight:600;background:var(--tint);color:var(--green)}
+.legend{display:flex;gap:1rem;flex-wrap:wrap;font-size:.88rem;color:var(--mute);margin:.6rem 0}.legend i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:.3rem}
+.hist{margin:.3rem 0 0;padding-left:1rem;font-size:.82rem;color:var(--mute)}
+dialog{max-width:640px;width:92%;border:1px solid var(--line);border-radius:14px;background:var(--surf);color:var(--ink)}
+footer{max-width:1080px;margin:auto;padding:1rem;color:var(--mute);font-size:.88rem;border-top:1px solid var(--line)}
+.bar{display:flex;gap:.6rem;flex-wrap:wrap;margin:1rem 0}
+@media print{header.top,footer,.bar,.btn{display:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo">Ir para o conteúdo</a>
+<header class="top"><div class="in">
+<a class="brand" href="#home"><i aria-hidden="true"></i>Fogo à Vista</a>
+<nav aria-label="Principal">
+<a href="#home">Início</a><a href="#denunciar">Denunciar</a><a href="#acompanhar">Acompanhar</a><a href="#mapa">Mapa</a><a href="#sobre">Como funciona</a><a href="#admin">Painel</a>
+</nav></div></header>
+
+<main id="conteudo" tabindex="-1">
+
+<section id="home" aria-labelledby="h-home">
+<div class="hero">
+<div>
+<h1 id="h-home">Viu fumaça? Conte em menos de 3 minutos.</h1>
+<p class="lead">Qualquer pessoa pode avisar sobre um foco de queimada. Sem cadastro, sem precisar se identificar. Seu relato chega organizado aos órgãos que atuam no combate.</p>
+<p><a class="btn fire big" href="#denunciar">Denuncie uma queimada</a></p>
+<div class="stats" id="stats" aria-label="Estatísticas da plataforma"></div>
+</div>
+<div><svg class="map" id="map-home" role="img" aria-label="Mapa esquemático do Brasil com as denúncias recentes"></svg>
+<p class="hint">Mapa esquemático com denúncias anonimizadas. <a href="#mapa">Ver mapa completo</a></p></div>
+</div>
+<div class="grid3">
+<div class="card"><h3>Simples</h3><p>Quatro passos: onde, o que viu, quando e envio. Funciona bem no celular, mesmo em campo.</p></div>
+<div class="card"><h3>Seguro</h3><p>A denúncia anônima é uma opção real. Contato só é pedido se você quiser receber notícias.</p></div>
+<div class="card"><h3>Acompanhável</h3><p>Você recebe um protocolo para consultar o andamento a qualquer momento.</p></div>
+</div>
+<div class="alert"><strong>Há fogo ameaçando pessoas ou casas agora?</strong> Ligue primeiro para o Corpo de Bombeiros (193). Depois registre aqui.</div>
+</section>
+
+<section id="denunciar" aria-labelledby="h-den">
+<h2 id="h-den">Registrar denúncia</h2>
+<ol class="steps" id="steps" aria-label="Etapas"></ol>
+<form id="form" novalidate class="card">
+<div data-step="0">
+<h3>Onde está o fogo?</h3>
+<label for="addr">Endereço ou referência <span class="hint">(digite e escolha uma sugestão)</span></label>
+<input type="text" id="addr" list="cities" autocomplete="off" placeholder="Ex.: Estrada do Sertão, km 12, Cuiabá">
+<datalist id="cities"><option value="Cuiabá, MT"><option value="Porto Velho, RO"><option value="Palmas, TO"><option value="Belém, PA"><option value="São Luís, MA"><option value="Campo Grande, MS"><option value="Goiânia, GO"><option value="Belo Horizonte, MG"><option value="Rio de Janeiro, RJ"><option value="São Paulo, SP"><option value="Manaus, AM"><option value="Rio Branco, AC"></datalist>
+<div class="bar"><button type="button" class="btn" id="geo">Usar minha localização atual</button></div>
+<p class="hint" id="geomsg" role="status"></p>
+<p><strong>Ou toque no mapa</strong> para marcar o ponto aproximado:</p>
+<svg class="map pick" id="map-pick" role="img" aria-label="Mapa para marcar o local. Alternativa: preencha latitude e longitude abaixo."></svg>
+<div class="row"><div><label for="lat">Latitude</label><input type="text" id="lat" inputmode="decimal" placeholder="-15.60"></div>
+<div><label for="lng">Longitude</label><input type="text" id="lng" inputmode="decimal" placeholder="-56.10"></div></div>
+</div>
+
+<div data-step="1" hidden>
+<h3>Fotos e vídeos</h3>
+<p class="hint">JPG, PNG, MP4 ou MOV. Até <span id="maxmb"></span> MB por arquivo. Você pode enviar vários. É opcional, mas ajuda muito.</p>
+<label for="files">Escolher arquivos</label>
+<input type="file" id="files" multiple accept=".jpg,.jpeg,.png,.mp4,.mov,image/jpeg,image/png,video/mp4,video/quicktime">
+<div class="thumbs" id="thumbs"></div>
+</div>
+
+<div data-step="2" hidden>
+<h3>O que você viu?</h3>
+<label for="desc">Descrição <span class="hint">(mínimo 10 caracteres)</span></label>
+<textarea id="desc" placeholder="Ex.: Fumaça escura subindo de área de pasto, vento forte em direção à mata."></textarea>
+<label for="when">Quando você viu?</label>
+<input type="datetime-local" id="when">
+<fieldset style="border:0;padding:0;margin:1rem 0 0"><legend style="font-weight:600">Marque o que se aplica <span class="hint">(opcional)</span></legend>
+<div class="tags" id="tags"></div></fieldset>
+</div>
+
+<div data-step="3" hidden>
+<h3>Revise e envie</h3>
+<div id="review" class="card" style="background:var(--bg)"></div>
+<label class="chk"><input type="checkbox" id="anon" checked> <span>Quero denunciar de forma anônima</span></label>
+<div id="contact" hidden>
+<label for="cname">Nome <span class="hint">(opcional)</span></label><input type="text" id="cname" autocomplete="name">
+<label for="cmail">E-mail para receber o protocolo <span class="hint">(opcional)</span></label><input type="email" id="cmail" autocomplete="email">
+</div>
+<label class="chk"><input type="checkbox" id="lgpd"> <span>Li a <a href="#privacidade" target="_blank">Política de Privacidade</a> e concordo com o uso dos dados para apuração da denúncia (LGPD).</span></label>
+<progress id="prog" max="100" value="0" hidden aria-label="Envio em andamento"></progress>
+</div>
+
+<div data-step="4" hidden id="done"></div>
+
+<p class="err" id="ferr" role="alert"></p>
+<div class="bar" id="nav-btns"><button type="button" class="btn" id="back">Voltar</button><button type="button" class="btn fire" id="next">Continuar</button></div>
+</form>
+</section>
+
+<section id="acompanhar" aria-labelledby="h-ac">
+<h2 id="h-ac">Acompanhar denúncia</h2>
+<form id="trk" class="card" novalidate>
+<label for="pn">Número do protocolo</label>
+<input type="text" id="pn" placeholder="FV-2026-000000" autocomplete="off">
+<div class="bar"><button class="btn fire" type="submit">Consultar</button></div>
+<div id="trkres" role="status"></div>
+</form>
+</section>
+
+<section id="mapa" aria-labelledby="h-mp">
+<h2 id="h-mp">Mapa de ocorrências</h2>
+<p>Os pontos mostram apenas a localização aproximada. Nenhum dado pessoal aparece.</p>
+<div class="legend"><span><i style="background:#e0a800"></i>Baixa</span><span><i style="background:#f08c00"></i>Média</span><span><i style="background:var(--fire)"></i>Alta</span><span><i style="background:var(--red)"></i>Crítica</span></div>
+<svg class="map" id="map-pub" role="img" aria-label="Mapa público de ocorrências"></svg>
+<p class="hint" id="pubcount"></p>
+</section>
+
+<section id="sobre" aria-labelledby="h-so">
+<h2 id="h-so">Como funciona</h2>
+<ol>
+<li><strong>Você denuncia.</strong> Informa o local, anexa o que tiver e descreve o que viu.</li>
+<li><strong>A equipe faz a triagem.</strong> Cada relato recebe uma gravidade e um status: pendente, em análise, encaminhada ou resolvida.</li>
+<li><strong>O caso é encaminhado.</strong> Segue em formato padronizado para o órgão competente.</li>
+<li><strong>Você acompanha.</strong> Use o protocolo para ver o histórico.</li>
+</ol>
+<h3>Órgãos envolvidos</h3>
+<div class="grid3">
+<div class="card"><h3>IBAMA / Prevfogo</h3><p>Fiscalização federal e prevenção de incêndios florestais.</p></div>
+<div class="card"><h3>Órgãos estaduais</h3><p>Secretarias e institutos de meio ambiente de cada estado.</p></div>
+<div class="card"><h3>Corpo de Bombeiros</h3><p>Combate direto ao fogo. Em emergência, ligue 193.</p></div>
+</div>
+<div class="alert">Esta plataforma é um protótipo. Os dados ficam apenas neste navegador e não são enviados a nenhum órgão.</div>
+</section>
+
+<section id="admin" aria-labelledby="h-ad">
+<h2 id="h-ad">Painel administrativo</h2>
+<div id="login" class="card"><p>Acesso restrito à equipe de triagem. <span class="hint">No protótipo, o código de acesso é <b>demo</b>.</span></p>
+<label for="code">Código de acesso</label><input type="password" id="code" autocomplete="off">
+<div class="bar"><button class="btn fire" id="enter">Entrar</button></div><p class="err" id="lerr" role="alert"></p></div>
+<div id="panel" hidden>
+<div class="bar">
+<div><label for="fs" style="margin:0">Status</label><select id="fs"><option value="">Todos</option><option>pendente</option><option>em análise</option><option>encaminhada</option><option>resolvida</option></select></div>
+<div><label for="fg" style="margin:0">Gravidade</label><select id="fg"><option value="">Todas</option><option>baixa</option><option>média</option><option>alta</option><option>crítica</option></select></div>
+<div style="align-self:end;display:flex;gap:.5rem;flex-wrap:wrap"><button class="btn" id="csv">Exportar CSV</button><button class="btn" id="prt">Imprimir / salvar PDF</button><button class="btn" id="out">Sair</button></div>
+</div>
+<div class="tw"><table><thead><tr><th>Protocolo</th><th>Registro</th><th>Local e descrição</th><th>Gravidade</th><th>Status</th><th>Encaminhar a</th><th>Histórico</th></tr></thead><tbody id="rows"></tbody></table></div>
+</div>
+<dialog id="dlg"><h3>CSV pronto para envio</h3><textarea id="csvtx" readonly style="min-height:180px"></textarea><div class="bar"><button class="btn fire" id="cp">Copiar</button><button class="btn" id="cl">Fechar</button></div></dialog>
+</section>
+
+<section id="privacidade" aria-labelledby="h-pv">
+<h2 id="h-pv">Política de Privacidade e Termos</h2>
+<p><strong>Dados coletados.</strong> Localização, descrição, data/hora e arquivos. Nome e e-mail só se você informar.</p>
+<p><strong>Finalidade.</strong> Apurar a ocorrência e encaminhá-la aos órgãos de fiscalização e combate ao fogo (LGPD, art. 7º).</p>
+<p><strong>Anonimato.</strong> Denúncias anônimas não guardam dados de contato. O mapa público mostra só a localização aproximada.</p>
+<p><strong>Seus direitos.</strong> Você pode pedir acesso, correção ou exclusão dos seus dados informando o protocolo.</p>
+<p><strong>Uso responsável.</strong> Denúncias falsas podem ser descartadas. Envie apenas conteúdo que você mesmo registrou.</p>
+</section>
+</main>
+<footer>Fogo à Vista · protótipo de plataforma cidadã de denúncias ambientais · em emergência, ligue 193</footer>
+
+<script>
+(function(){
+var MAXMB=25,KEY="fv:reports",GRAV=["baixa","média","alta","crítica"],ST=["pendente","em análise","encaminhada","resolvida"],ORG=["IBAMA / Prevfogo","Órgão ambiental estadual","Corpo de Bombeiros","Secretaria municipal de meio ambiente"];
+var TAGS=["Fumaça densa","Chamas visíveis","Área rural","Área urbana","Perto de mata","Perto de moradias"];
+var $=function(s){return document.querySelector(s)},$$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})};
+var mem=null;
+function load(){try{var v=localStorage.getItem(KEY);if(v)return JSON.parse(v)}catch(e){}return mem}
+function save(d){mem=d;try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}
+function ago(h){return new Date(Date.now()-h*36e5).toISOString()}
+function seed(){var s=[["Sinop, MT",-11.86,-55.5,"alta","em análise",30],["Altamira, PA",-3.2,-52.2,"crítica","encaminhada",20],["Palmas, TO",-10.2,-48.3,"média","pendente",8],["Balsas, MA",-7.5,-46.0,"alta","encaminhada",52],["Unaí, MG",-16.35,-46.9,"baixa","resolvida",90],["Corumbá, MS",-19.0,-57.65,"média","pendente",5],["Porto Velho, RO",-8.76,-63.9,"crítica","em análise",3]];
+return s.map(function(r,i){return{id:"FV-2026-"+String(100100+i*37),addr:r[0],lat:r[1],lng:r[2],grav:r[3],st:r[4],desc:"Fumaça visível e foco de fogo em vegetação.",tags:["Fumaça densa"],when:ago(r[5]),created:ago(r[5]),files:0,anon:true,hist:[{t:ago(r[5]),x:"Denúncia recebida"}].concat(r[4]!=="pendente"?[{t:ago(r[5]/2),x:"Status: "+r[4]}]:[])}})}
+function db(){var d=load();if(!d){d=seed();save(d)}return d}
+function fmt(i){try{return new Date(i).toLocaleString("pt-BR",{dateStyle:"short",timeStyle:"short"})}catch(e){return i}}
+var BR=[[-60,5.2],[-52,4.5],[-50,1.8],[-50,-.5],[-44.5,-2.3],[-39,-3],[-35,-5.2],[-34.8,-8],[-37,-12],[-39,-17],[-40.5,-22],[-44,-23.2],[-48,-25.5],[-48.8,-28.5],[-53.5,-33.7],[-57.6,-30.2],[-55,-27.5],[-54.2,-25.6],[-57.6,-22.2],[-58,-16.5],[-60.3,-14],[-65,-9.8],[-70,-11],[-73.8,-7.5],[-72.5,-2.5],[-69.5,-4.2],[-70,1],[-67,2],[-64,4],[-60.5,4.8]];
+function px(lat,lng){return[(lng+75)/42*420,(6-lat)/41*430]}
+function ll(x,y){return[6-y/430*41,x/420*42-75]}
+var gk={"baixa":"baixa","média":"media","alta":"alta","crítica":"critica"};
+function drawMap(el,pins,sel,pulse){
+var pts=BR.map(function(p){var q=px(p[1],p[0]);return q[0].toFixed(1)+","+q[1].toFixed(1)}).join(" ");
+var h='<g aria-hidden="true"><polygon class="land" points="'+pts+'"/>';
+pins.forEach(function(p,i){var q=px(p.lat,p.lng);var c=gk[p.grav]||"media";
+if(pulse&&i<3)h+='<circle class="pin '+c+' pulse" cx="'+q[0]+'" cy="'+q[1]+'" r="6"/>';
+h+='<circle class="pin '+c+'" cx="'+q[0]+'" cy="'+q[1]+'" r="'+(pulse?6:7)+'"><title>'+esc(p.addr)+" – gravidade "+esc(p.grav)+'</title></circle>'});
+if(sel){var s=px(sel[0],sel[1]);h+='<path d="M'+s[0]+' '+s[1]+'l-9-22a10 10 0 1 1 18 0z" fill="#d9480f" stroke="#fff" stroke-width="2"/><circle cx="'+s[0]+'" cy="'+(s[1]-24)+'" r="4" fill="#fff"/>'}
+el.setAttribute("viewBox","0 0 420 430");el.innerHTML=h+"</g>"}
+function publicPins(){return db().map(function(r){return{addr:r.addr.split(",").pop().trim()||"Brasil",lat:Math.round(r.lat*10)/10,lng:Math.round(r.lng*10)/10,grav:r.grav}})}
+
+/* routing */
+function route(){var h=(location.hash||"#home").slice(1);if(!$("#"+h)||$("#"+h).tagName!=="SECTION")h="home";
+$$("main>section").forEach(function(s){s.classList.toggle("on",s.id===h)});
+$$("nav a").forEach(function(a){if(a.getAttribute("href")==="#"+h)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+if(h==="home")home();if(h==="mapa")pub();if(h==="denunciar")showStep();if(h==="admin")adm();
+window.scrollTo(0,0);var t=$("#"+h+" h2,#"+h+" h1");if(t){t.setAttribute("tabindex","-1");t.focus({preventScroll:true})}}
+window.addEventListener("hashchange",route);
+
+function home(){var d=db();var a=d.filter(function(r){return r.st==="em análise"||r.st==="encaminhada"}).length,s=d.filter(function(r){return r.st==="resolvida"}).length;
+$("#stats").innerHTML='<div><b>'+d.length+'</b><span>denúncias registradas</span></div><div><b>'+a+'</b><span>em análise ou encaminhadas</span></div><div><b>'+s+'</b><span>resolvidas</span></div>';
+drawMap($("#map-home"),publicPins(),null,true)}
+function pub(){var p=publicPins();drawMap($("#map-pub"),p,null,false);$("#pubcount").textContent=p.length+" ocorrências exibidas, com posição aproximada."}
+
+/* form */
+var step=0,F={lat:null,lng:null,files:[]};
+var LABELS=["Local","Evidências","Descrição","Revisão","Pronto"];
+$("#maxmb").textContent=MAXMB;
+$("#tags").innerHTML=TAGS.map(function(t,i){return'<label class="chk"><input type="checkbox" name="tag" value="'+t+'"> <span>'+t+'</span></label>'}).join("");
+function pad(n){return String(n).padStart(2,"0")}
+function nowLocal(){var d=new Date();return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())+"T"+pad(d.getHours())+":"+pad(d.getMinutes())}
+$("#when").value=nowLocal();$("#when").max=nowLocal();
+function showStep(){$$("#form [data-step]").forEach(function(s){s.hidden=+s.dataset.step!==step});
+$("#steps").innerHTML=LABELS.map(function(l,i){return'<li class="'+(i===step?"cur":i<step?"done":"")+'"'+(i===step?' aria-current="step"':"")+">"+(i+1)+". "+l+"</li>"}).join("");
+$("#back").hidden=step===0||step===4;$("#next").hidden=step===4;$("#next").textContent=step===3?"Enviar denúncia":"Continuar";
+$("#ferr").textContent="";if(step===3)review();
+if(step===0)drawMap($("#map-pick"),[],F.lat!=null?[F.lat,F.lng]:null,false)}
+function setCoords(lat,lng){F.lat=lat;F.lng=lng;$("#lat").value=lat.toFixed(5);$("#lng").value=lng.toFixed(5);drawMap($("#map-pick"),[],[lat,lng],false)}
+$("#map-pick").addEventListener("click",function(e){var r=this.getBoundingClientRect();var x=(e.clientX-r.left)/r.width*420,y=(e.clientY-r.top)/r.height*430;var c=ll(x,y);setCoords(c[0],c[1])});
+function manual(){var a=parseFloat($("#lat").value.replace(",",".")),b=parseFloat($("#lng").value.replace(",","."));if(isFinite(a)&&isFinite(b)&&Math.abs(a)<=90&&Math.abs(b)<=180){F.lat=a;F.lng=b;drawMap($("#map-pick"),[],[a,b],false)}}
+$("#lat").addEventListener("change",manual);$("#lng").addEventListener("change",manual);
+$("#geo").addEventListener("click",function(){var m=$("#geomsg");if(!navigator.geolocation){m.textContent="Seu navegador não permite localização. Toque no mapa ou digite o endereço.";return}
+m.textContent="Buscando sua localização…";navigator.geolocation.getCurrentPosition(function(p){setCoords(p.coords.latitude,p.coords.longitude);m.textContent="Localização capturada. Se o fogo estiver longe de você, ajuste no mapa."},function(){m.textContent="Não foi possível obter a localização. Toque no mapa ou digite o endereço."},{enableHighAccuracy:true,timeout:10000})});
+$("#files").addEventListener("change",function(){var ok=[],bad=[];Array.prototype.forEach.call(this.files,function(f){var good=/\.(jpe?g|png|mp4|mov)$/i.test(f.name)&&/^(image\/(jpeg|png)|video\/(mp4|quicktime))$/.test(f.type);
+if(!good)bad.push(f.name+" (formato não aceito)");else if(f.size>MAXMB*1048576)bad.push(f.name+" (maior que "+MAXMB+" MB)");else ok.push(f)});
+F.files=ok;$("#ferr").textContent=bad.length?"Não incluídos: "+bad.join("; ")+".":"";
+$("#thumbs").innerHTML="";ok.forEach(function(f){var u=URL.createObjectURL(f),fig=document.createElement("figure"),m=document.createElement(f.type.indexOf("video")===0?"video":"img");m.src=u;if(m.tagName==="VIDEO")m.muted=true;else m.alt="Pré-visualização de "+f.name;fig.appendChild(m);var c=document.createElement("figcaption");c.textContent=f.name+" · "+(f.size/1048576).toFixed(1)+" MB";fig.appendChild(c);$("#thumbs").appendChild(fig)})});
+function tags(){return $$("input[name=tag]:checked").map(function(i){return i.value})}
+function review(){$("#review").innerHTML="<p><b>Local:</b> "+esc($("#addr").value||"Sem endereço")+(F.lat!=null?" ("+F.lat.toFixed(4)+", "+F.lng.toFixed(4)+")":"")+"</p><p><b>Arquivos:</b> "+F.files.length+"</p><p><b>Quando:</b> "+esc(fmt($("#when").value))+"</p><p><b>Descrição:</b> "+esc($("#desc").value)+"</p><p style='margin:0'><b>Marcadores:</b> "+(esc(tags().join(", "))||"nenhum")+"</p>"}
+$("#anon").addEventListener("change",function(){$("#contact").hidden=this.checked});
+function validate(){var e="";
+if(step===0){manual();if(F.lat==null&&$("#addr").value.trim().length<5)e="Informe um endereço, toque no mapa ou use sua localização."}
+if(step===2){if($("#desc").value.trim().length<10)e="Descreva o que viu com pelo menos 10 caracteres.";else if(!$("#when").value)e="Informe quando você viu o fogo.";else if(new Date($("#when").value)>new Date())e="A data e a hora não podem estar no futuro."}
+if(step===3){var m=$("#cmail").value.trim();if(!$("#anon").checked&&m&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m))e="O e-mail parece incorreto. Confira ou envie como anônimo.";else if(!$("#lgpd").checked)e="Marque a concordância com a Política de Privacidade para enviar."}
+$("#ferr").textContent=e;return!e}
+function autoGrav(t){return t.indexOf("Chamas visíveis")>-1&&(t.indexOf("Perto de moradias")>-1||t.indexOf("Perto de mata")>-1)?"crítica":t.indexOf("Chamas visíveis")>-1?"alta":t.length?"média":"baixa"}
+$("#back").addEventListener("click",function(){if(step>0){step--;showStep()}});
+$("#next").addEventListener("click",function(){if(!validate())return;
+if(step<3){step++;showStep();return}
+var p=$("#prog"),b=$("#next");p.hidden=false;b.disabled=true;b.textContent="Enviando…";var v=0;
+var iv=setInterval(function(){v+=12;p.value=v;if(v>=100){clearInterval(iv);finish()}},120)});
+function finish(){var d=db(),n="FV-2026-"+String(Math.floor(100000+Math.random()*899999)),t=tags(),anon=$("#anon").checked,mail=$("#cmail").value.trim();
+var c=F.lat!=null?[F.lat,F.lng]:[-14.2+Math.random()*.01,-51.9];
+d.unshift({id:n,addr:$("#addr").value.trim()||"Ponto marcado no mapa",lat:c[0],lng:c[1],grav:autoGrav(t),st:"pendente",desc:$("#desc").value.trim(),tags:t,when:new Date($("#when").value).toISOString(),created:new Date().toISOString(),files:F.files.length,anon:anon,contact:anon?null:{name:$("#cname").value.trim(),mail:mail},hist:[{t:new Date().toISOString(),x:"Denúncia recebida"}]});
+save(d);$("#done").innerHTML='<h3 class="ok">Denúncia enviada. Obrigado por avisar.</h3><p>Guarde seu número de protocolo:</p><div class="proto" id="pv">'+n+'</div><div class="bar"><button type="button" class="btn" id="cpp">Copiar protocolo</button><a class="btn" href="#acompanhar">Acompanhar denúncia</a></div><p class="hint">'+(!anon&&mail?"Em um sistema real, um e-mail de confirmação seria enviado para "+esc(mail)+". Neste protótipo, nenhum e-mail é enviado.":"Como a denúncia é anônima, anote o protocolo: ele não será reenviado.")+"</p>";
+step=4;showStep();$("#cpp").addEventListener("click",function(){try{navigator.clipboard.writeText(n);this.textContent="Copiado"}catch(e){this.textContent="Selecione e copie o número"}});
+$("#form").reset();F={lat:null,lng:null,files:[]};$("#thumbs").innerHTML="";$("#when").value=nowLocal();$("#prog").hidden=true;$("#next").disabled=false;$("#contact").hidden=true;$("#done").focus&&$("#done").setAttribute("tabindex","-1")}
+window.addEventListener("hashchange",function(){if(step===4&&location.hash!=="#denunciar"){step=0}});
+
+/* acompanhar */
+$("#trk").addEventListener("submit",function(e){e.preventDefault();var q=$("#pn").value.trim().toUpperCase(),r=db().filter(function(x){return x.id===q})[0],o=$("#trkres");
+if(!q){o.innerHTML='<p class="err">Digite o número do protocolo.</p>';return}
+if(!r){o.innerHTML='<p class="err">Protocolo não encontrado. Confira o número e tente de novo.</p>';return}
+o.innerHTML='<h3>'+esc(r.id)+' <span class="badge">'+esc(r.st)+'</span></h3><p>Registrada em '+esc(fmt(r.created))+'. Local: '+esc(r.addr)+'.</p><ul class="hist">'+r.hist.map(function(h){return"<li>"+esc(fmt(h.t))+" – "+esc(h.x)+"</li>"}).join("")+"</ul>"});
+
+/* admin */
+var authed=false;
+function adm(){$("#login").hidden=authed;$("#panel").hidden=!authed;if(authed)rows()}
+$("#enter").addEventListener("click",function(){if($("#code").value==="demo"){authed=true;$("#code").value="";$("#lerr").textContent="";adm()}else $("#lerr").textContent="Código incorreto."});
+$("#out").addEventListener("click",function(){authed=false;adm()});
+function opts(a,v){return a.map(function(o){return"<option"+(o===v?" selected":"")+">"+o+"</option>"}).join("")}
+function rows(){var fs=$("#fs").value,fg=$("#fg").value,d=db().filter(function(r){return(!fs||r.st===fs)&&(!fg||r.grav===fg)});
+$("#rows").innerHTML=d.length?d.map(function(r){return'<tr data-id="'+esc(r.id)+'"><td><b>'+esc(r.id)+"</b></td><td>"+esc(fmt(r.created))+'</td><td>'+esc(r.addr)+" ("+r.lat.toFixed(2)+", "+r.lng.toFixed(2)+")<br><span class='hint'>"+esc(r.desc)+" · "+r.files+" arquivo(s)"+(r.anon?" · anônima":"")+'</span></td><td><select aria-label="Gravidade de '+esc(r.id)+'" data-f="grav">'+opts(GRAV,r.grav)+'</select></td><td><select aria-label="Status de '+esc(r.id)+'" data-f="st">'+opts(ST,r.st)+'</select></td><td><select aria-label="Órgão para '+esc(r.id)+'" data-f="org"><option value="">Escolher…</option>'+opts(ORG,"")+'</select><button class="btn sm" data-a="send" style="margin-top:.3rem">Encaminhar</button></td><td><ul class="hist">'+r.hist.slice(-3).map(function(h){return"<li>"+esc(fmt(h.t))+" – "+esc(h.x)+"</li>"}).join("")+"</ul></td></tr>"}).join(""):'<tr><td colspan="7">Nenhuma denúncia com esses filtros.</td></tr>'}
+$("#fs").addEventListener("change",rows);$("#fg").addEventListener("change",rows);
+function upd(id,fn){var d=db();d.forEach(function(r){if(r.id===id)fn(r)});save(d);rows()}
+$("#rows").addEventListener("change",function(e){var s=e.target,id=s.closest("tr").dataset.id,f=s.dataset.f;if(f==="grav"||f==="st")upd(id,function(r){r[f]=s.value;r.hist.push({t:new Date().toISOString(),x:(f==="st"?"Status: ":"Gravidade: ")+s.value})})});
+$("#rows").addEventListener("click",function(e){if(e.target.dataset.a!=="send")return;var tr=e.target.closest("tr"),o=tr.querySelector("[data-f=org]").value;if(!o){tr.querySelector("[data-f=org]").focus();return}
+upd(tr.dataset.id,function(r){r.st="encaminhada";r.hist.push({t:new Date().toISOString(),x:"Encaminhada a "+o})})});
+function q(v){return'"'+String(v==null?"":v).replace(/"/g,'""')+'"'}
+$("#csv").addEventListener("click",function(){var fs=$("#fs").value,fg=$("#fg").value,d=db().filter(function(r){return(!fs||r.st===fs)&&(!fg||r.grav===fg)});
+var c="protocolo,registro,local,latitude,longitude,gravidade,status,descricao,marcadores,arquivos\n"+d.map(function(r){return[r.id,r.created,r.addr,r.lat,r.lng,r.grav,r.st,r.desc,r.tags.join("; "),r.files].map(q).join(",")}).join("\n");
+$("#csvtx").value=c;try{$("#dlg").showModal()}catch(e){$("#dlg").setAttribute("open","")}});
+$("#cp").addEventListener("click",function(){var t=$("#csvtx");try{navigator.clipboard.writeText(t.value);this.textContent="Copiado"}catch(e){t.select()}});
+$("#cl").addEventListener("click",function(){$("#dlg").close()});
+$("#prt").addEventListener("click",function(){window.print()});
+route()})();
+</script>
+</body>
+</html>
